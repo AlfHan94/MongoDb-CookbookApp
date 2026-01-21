@@ -30,7 +30,7 @@ public class RecipeService
     }
 
 
-    public void DeletRecipe(string id)
+    public void DeleteRecipe(string id)
     {
         var filter = Builders<Recipe>.Filter.Eq(r => r.Id, id);
 
