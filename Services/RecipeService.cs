@@ -30,5 +30,11 @@ public class RecipeService
     }
 
 
+    public void DeletRecipe(string id)
+    {
+        var filter = Builders<Recipe>.Filter.Eq(r => r.Id, id);
+
+        _recipes.DeleteOne(filter);
+    }
 
 }
