@@ -1,6 +1,7 @@
 ﻿using CookbookApp.Data;
 using CookbookApp.Models;
 using CookbookApp.Services;
+using System.Linq;
 
 
 var context = new MongoContext();
@@ -16,17 +17,15 @@ while (true)
     Console.WriteLine();
     Console.WriteLine("Choose an option: ");
     Console.WriteLine("1. Add recipe");
-    Console.WriteLine("5. Show all recipes");
-    Console.WriteLine("6. Show reviews for recipe");
+    Console.WriteLine("2. Show all recipes");
+    Console.WriteLine("3. Add review");
+    Console.WriteLine("4. Show reviews");
     Console.WriteLine("0. Exit");
 
     var choice = Console.ReadLine();
 
     switch (choice)
     {
-        case "0":
-            return;
-
         case "1":
             {
                 Console.Write("Title: ");
@@ -62,10 +61,7 @@ while (true)
                 break;
             }
 
-
-
-
-        case "5":
+        case "2":
             {
                 Console.Clear();
 
@@ -105,18 +101,127 @@ while (true)
                     Console.WriteLine($"{i + 1}. {selected.Steps[i]}");
 
                 Console.WriteLine();
-                Console.WriteLine("Press ENTER to return to main menu");
+                Console.WriteLine("Press ENTER to return");
                 Console.ReadLine();
 
                 break;
             }
 
+        case "3":
+            {
+                Console.Clear();
 
+                var recipes = recipeService.GetAllRecipes();
+                if (recipes.Count == 0)
+                {
+                    Console.WriteLine("No recipes found.");
+                    Console.WriteLine("Press ENTER to return");
+                    Console.ReadLine();
+                    break;
+                }
 
+                Console.WriteLine("Choose a recipe to review:");
+                for (int i = 0; i < recipes.Count; i++)
+                    Console.WriteLine($"{i + 1}. {recipes[i].Title}");
+
+                Console.Write("Enter recipe number: ");
+                var input = Console.ReadLine();
+
+                if (!int.TryParse(input, out int recipeChoice) || recipeChoice < 1 || recipeChoice > recipes.Count)
+                {
+                    Console.WriteLine("Invalid choice.");
+                    Console.WriteLine("Press ENTER to return");
+                    Console.ReadLine();
+                    break;
+                }
+
+                var selectedRecipe = recipes[recipeChoice - 1];
+
+                Console.Write("Rating (1-5):");
+                if (!int.TryParse(Console.ReadLine(), out int rating) || rating < 1 || rating > 5)
+                {
+                    Console.WriteLine("Invalid rating.");
+                    Console.WriteLine("Press ENTER to return");
+                    Console.ReadLine();
+                    break;
+                }
+
+                Console.Write("Comment (optional):");
+                var comment = Console.ReadLine();
+
+                var review = new Review()
+                {
+                    RecipeId = selectedRecipe.Id!,
+                    Rating = rating,
+                    Comment = string.IsNullOrWhiteSpace(comment) ? null : comment
+                };
+
+                reviewService.AddReview(review);
+
+                Console.WriteLine("Review added!");
+                Console.WriteLine("Press ENTER to return");
+                Console.ReadLine();
+                break;
+            }
+
+        case "4":
+            {
+                Console.Clear();
+
+                var recipes = recipeService.GetAllRecipes();
+                if (recipes.Count == 0)
+                {
+                    Console.WriteLine("No recipes found.");
+                    Console.WriteLine("Press ENTER to return");
+                    Console.ReadLine();
+                    break;
+                }
+
+                Console.WriteLine("Choose a recipe to watch their reviews:");
+                for (int i = 0; i < recipes.Count; i++)
+                    Console.WriteLine($"{i + 1}. {recipes[i].Title}");
+
+                Console.Write("Enter recipe number: ");
+                var input = Console.ReadLine();
+
+                if (!int.TryParse(input, out int recipeChoice) || recipeChoice < 1 || recipeChoice > recipes.Count)
+                {
+                    Console.WriteLine("Invalid choice.");
+                    Console.WriteLine("Press ENTER to return");
+                    Console.ReadLine();
+                    break;
+                }
+
+                var selectedRecipe = recipes[recipeChoice - 1];
+
+                var reviews = reviewService.GetReviewsForRecipe(selectedRecipe.Id!);
+
+                Console.WriteLine();
+                Console.WriteLine($"Reviews for: {selectedRecipe.Title}");
+                Console.WriteLine("--------------------------------");
+
+                if (reviews.Count == 0)
+                {
+                    Console.WriteLine("No reviews yet.");
+                    Console.WriteLine("Press ENTER to return");
+                    Console.ReadLine();
+                    break;
+                }
+
+                double averageRating = reviews.Average(r => r.Rating);
+                Console.WriteLine($"Average rating: {averageRating:F1} / 5");
+                Console.WriteLine();
+
+                foreach (var r in reviews)
+                    Console.WriteLine($"- {r.Rating}/5  {r.Comment}");
+
+                Console.WriteLine();
+                Console.WriteLine("Press ENTER to return");
+                Console.ReadLine();
+                break;
+            }
+        case "0":
+            return;
     }
-
-
-
-
 }
 
