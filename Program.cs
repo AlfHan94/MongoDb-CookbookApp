@@ -67,6 +67,8 @@ while (true)
 
         case "5":
             {
+                Console.Clear();
+
                 var recipes = recipeService.GetAllRecipes();
 
                 if (recipes.Count == 0)
@@ -75,11 +77,37 @@ while (true)
                     break;
                 }
 
-                Console.WriteLine("Choose a recipe:");
+                Console.WriteLine("Recipes:");
                 for (int i = 0; i < recipes.Count; i++)
                 {
                     Console.WriteLine($"{i + 1}. {recipes[i].Title}");
                 }
+
+                Console.Write("Choose a recipe number to view details: ");
+                var input = Console.ReadLine();
+
+                if (!int.TryParse(input, out int choiceNumber) || choiceNumber < 1 || choiceNumber > recipes.Count)
+                {
+                    Console.WriteLine("Invalid choice.");
+                    break;
+                }
+
+                var selected = recipes[choiceNumber - 1];
+
+                Console.WriteLine();
+                Console.WriteLine(selected.Title);
+                Console.WriteLine("Ingredients:");
+                foreach (var ing in selected.Ingredients)
+                    Console.WriteLine($"- {ing}");
+
+                Console.WriteLine("Steps:");
+                for (int i = 0; i < selected.Steps.Count; i++)
+                    Console.WriteLine($"{i + 1}. {selected.Steps[i]}");
+
+                Console.WriteLine();
+                Console.WriteLine("Press ENTER to return to main menu");
+                Console.ReadLine();
+
                 break;
             }
 
