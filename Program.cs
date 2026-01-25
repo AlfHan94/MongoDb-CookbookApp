@@ -18,8 +18,9 @@ while (true)
     Console.WriteLine("Choose an option: ");
     Console.WriteLine("1. Add recipe");
     Console.WriteLine("2. Show all recipes");
-    Console.WriteLine("3. Add review");
-    Console.WriteLine("4. Show reviews");
+    Console.WriteLine("3. Remove/Update recipes");
+    Console.WriteLine("4. Add review");
+    Console.WriteLine("5. Show reviews");
     Console.WriteLine("0. Exit");
 
     var choice = Console.ReadLine();
@@ -120,6 +121,74 @@ while (true)
                     break;
                 }
 
+                Console.WriteLine("Choose a recipe:");
+                for (int i = 0; i < recipes.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {recipes[i].Title}");
+                }
+
+                Console.Write("Enter a recipe number: ");
+                var input = Console.ReadLine();
+
+                if (!int.TryParse(input, out int recipeChoice) || recipeChoice < 1 || recipeChoice > recipes.Count)
+                {
+                    Console.WriteLine("Invalid choice.");
+                    Console.WriteLine("Press ENTER to return");
+                    Console.ReadLine();
+                    break;
+                }
+
+                var selectedRecipe = recipes[recipeChoice - 1];
+
+                Console.WriteLine();
+                Console.WriteLine($"Selected: {selectedRecipe.Title}");
+                Console.Clear();
+                Console.WriteLine($"Recipe: {selectedRecipe.Title}");
+                Console.WriteLine("1. Update recipe");
+                Console.WriteLine("2. Delete recipe");
+                Console.WriteLine("0. Cancel");
+
+                var action = Console.ReadLine();
+
+                switch (action)
+                {
+                    case "1":
+                        Console.WriteLine("Update coming soon...");
+                        Console.ReadLine();
+                        break;
+
+                    case "2":
+                        Console.WriteLine("Delete coming soon...");
+                        Console.ReadLine();
+                        break;
+
+                    case "0":
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid choice");
+                        Console.ReadLine();
+                        break;
+                }
+
+
+                break;
+            }
+
+
+        case "4":
+            {
+                Console.Clear();
+
+                var recipes = recipeService.GetAllRecipes();
+                if (recipes.Count == 0)
+                {
+                    Console.WriteLine("No recipes found.");
+                    Console.WriteLine("Press ENTER to return");
+                    Console.ReadLine();
+                    break;
+                }
+
                 Console.WriteLine("Choose a recipe to review:");
                 for (int i = 0; i < recipes.Count; i++)
                     Console.WriteLine($"{i + 1}. {recipes[i].Title}");
@@ -164,7 +233,7 @@ while (true)
                 break;
             }
 
-        case "4":
+        case "5":
             {
                 Console.Clear();
 
