@@ -29,12 +29,10 @@ public class RecipeService
         _recipes.ReplaceOne(filter, updateRecipe);
     }
 
-
     public void DeleteRecipe(string id)
     {
-        var filter = Builders<Recipe>.Filter.Eq(r => r.Id, id);
-
-        _recipes.DeleteOne(filter);
+        _recipes.DeleteOne(r => r.Id == id);
     }
+
 
 }

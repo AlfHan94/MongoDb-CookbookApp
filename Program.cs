@@ -158,7 +158,9 @@ while (true)
                         break;
 
                     case "2":
-                        Console.WriteLine("Delete coming soon...");
+                        recipeService.DeleteRecipe(selectedRecipe.Id!);
+                        Console.WriteLine("Recipe deleted.");
+                        Console.WriteLine("Press ENTER to return");
                         Console.ReadLine();
                         break;
 
@@ -170,7 +172,6 @@ while (true)
                         Console.ReadLine();
                         break;
                 }
-
 
                 break;
             }
