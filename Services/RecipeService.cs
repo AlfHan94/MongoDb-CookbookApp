@@ -22,12 +22,11 @@ public class RecipeService
         return _recipes.Find(_ => true).ToList();
     }
 
-    public void UpdateRecipe(string id, Recipe updateRecipe)
+    public void UpdateRecipe(Recipe updatedRecipe)
     {
-        var filter = Builders<Recipe>.Filter.Eq(r => r.Id, id);
-
-        _recipes.ReplaceOne(filter, updateRecipe);
+        _recipes.ReplaceOne(r => r.Id == updatedRecipe.Id, updatedRecipe);
     }
+
 
     public void DeleteRecipe(string id)
     {

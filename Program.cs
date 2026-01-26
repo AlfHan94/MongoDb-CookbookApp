@@ -10,8 +10,6 @@ var recipeService = new RecipeService(context);
 var reviewService = new ReviewService(context);
 
 
-
-
 while (true)
 {
     Console.WriteLine();
@@ -153,9 +151,56 @@ while (true)
                 switch (action)
                 {
                     case "1":
-                        Console.WriteLine("Update coming soon...");
-                        Console.ReadLine();
-                        break;
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"Updating: {selectedRecipe.Title}");
+                            Console.WriteLine();
+
+                            Console.Write("New title (ENTER = keep): ");
+                            var newTitle = Console.ReadLine();
+                            if (!string.IsNullOrWhiteSpace(newTitle))
+                                selectedRecipe.Title = newTitle;
+
+                            Console.WriteLine();
+                            Console.WriteLine("Enter ingredients (empty line to finish). Leave empty immediately to keep current:");
+                            var newIngredients = new List<string>();
+                            var firstIng = Console.ReadLine();
+                            if (!string.IsNullOrWhiteSpace(firstIng))
+                            {
+                                newIngredients.Add(firstIng);
+                                while (true)
+                                {
+                                    var line = Console.ReadLine();
+                                    if (string.IsNullOrWhiteSpace(line)) break;
+                                    newIngredients.Add(line);
+                                }
+                                selectedRecipe.Ingredients = newIngredients;
+                            }
+
+                            Console.WriteLine();
+                            Console.WriteLine("Enter steps (empty line to finish). Leave empty immediately to keep current:");
+                            var newSteps = new List<string>();
+                            var firstStep = Console.ReadLine();
+                            if (!string.IsNullOrWhiteSpace(firstStep))
+                            {
+                                newSteps.Add(firstStep);
+                                while (true)
+                                {
+                                    var line = Console.ReadLine();
+                                    if (string.IsNullOrWhiteSpace(line)) break;
+                                    newSteps.Add(line);
+                                }
+                                selectedRecipe.Steps = newSteps;
+                            }
+
+                            recipeService.UpdateRecipe(selectedRecipe);
+
+                            Console.WriteLine();
+                            Console.WriteLine("Recipe updated!");
+                            Console.WriteLine("Press ENTER to return");
+                            Console.ReadLine();
+                            break;
+                        }
 
                     case "2":
                         recipeService.DeleteRecipe(selectedRecipe.Id!);
@@ -175,7 +220,6 @@ while (true)
 
                 break;
             }
-
 
         case "4":
             {
