@@ -1,9 +1,22 @@
-# CookbookApp
+# Cookbook Console APP (MongoDB)
 
-A simple console application built with C# and MongoDB.
-The application allows the user to manage recipes and leave reviews using a MongoDB database running on localhost.
+A simple console application built with C# that uses MongoDB via (MongoDB.Driver) to store recipes and reviews.
 
-Make sure MongoDB is running locally before starting the application.
+- Create, read, update and delete recipes (CRUD)
+- Add and view revies for each recipe
+- Shows average rating for recipes based on saved reviews
+- Database and collections are created automatically on first run
+- Includes testdata (2 recipes + 4 reviews)
+
+## Database
+
+- MongoDB runs on localhost
+- Database name: AlfredHandin
+- There are two Collections in the app
 
 
-This is the third and final school-assignment for the Database-course.
+## How to run the app
+1. Make sure MongoDB is running locally
+2. Clone the repository and open the solution in Visual Studio.
+3. Press 5 to run the application
+4. Use the menu to manage recipes and reviews.
