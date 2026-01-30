@@ -8,6 +8,7 @@ var context = new MongoContext();
 
 var recipeService = new RecipeService(context);
 var reviewService = new ReviewService(context);
+SeedData(recipeService, reviewService);
 
 
 while (true)
@@ -337,5 +338,89 @@ while (true)
         case "0":
             return;
     }
+}
+
+static void SeedData(RecipeService recipeService, ReviewService reviewService)
+{
+    var recipes = recipeService.GetAllRecipes();
+    if (recipes.Count > 0)
+        return;
+
+    var pancakes = new Recipe
+    {
+        Title = "Pancakes",
+        Ingredients = new List<string>
+        {
+            "2 eggs",
+            "3 dl milk",
+            "2 dl flour",
+            "1 pinch of salt",
+            "Butter for frying"
+        },
+        Steps = new List<string>
+        {
+            "Whisk eggs and milk together.",
+            "Add flour and salt and whisk until smooth.",
+            "Fry in butter on medium heat until golden on both sides."
+        }
+    };
+
+    recipeService.AddRecipe(pancakes);
+
+    recipes = recipeService.GetAllRecipes();
+    var pancakesFromDb = recipes.First(r => r.Title == "Pancakes");
+
+    var tomatoPasta = new Recipe
+    {
+        Title = "Tomato Pasta",
+        Ingredients = new List<string>
+        {
+            "Pasta",
+            "1 can crushed tomatoes",
+            "1 garlic clove",
+            "Olive oil",
+            "Salt & pepper"
+        },
+        Steps = new List<string>
+        {
+            "Boil pasta until al dente.",
+            "Fry garlic in olive oil for 30 seconds.",
+            "Add tomatoes, simmer 10 minutes, season.",
+            "Mix pasta with sauce."
+        }
+    };
+
+    recipeService.AddRecipe(tomatoPasta);
+
+    recipes = recipeService.GetAllRecipes();
+    var pastaFromDb = recipes.First(r => r.Title == "Tomato Pasta");
+
+    reviewService.AddReview(new Review
+    {
+        RecipeId = pancakesFromDb.Id!,
+        Rating = 5,
+        Comment = "Super easy and really tasty!"
+    });
+
+    reviewService.AddReview(new Review
+    {
+        RecipeId = pancakesFromDb.Id!,
+        Rating = 2,
+        Comment = "Too bland for my taste, needed more salt/sugar."
+    });
+
+    reviewService.AddReview(new Review
+    {
+        RecipeId = pastaFromDb.Id!,
+        Rating = 4,
+        Comment = "Nice simple weeknight meal."
+    });
+
+    reviewService.AddReview(new Review
+    {
+        RecipeId = pastaFromDb.Id!,
+        Rating = 1,
+        Comment = "Turned out watery; I should have reduced the sauce longer."
+    });
 }
 
