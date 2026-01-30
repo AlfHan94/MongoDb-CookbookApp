@@ -18,5 +18,5 @@ A simple console application built with C# that uses MongoDB via (MongoDB.Driver
 ## How to run the app
 1. Make sure MongoDB is running locally
 2. Clone the repository and open the solution in Visual Studio.
-3. Press 5 to run the application
+3. Run the application
 4. Use the menu to manage recipes and reviews.
